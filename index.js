@@ -2,7 +2,7 @@ let boxes = [];
 let player;
 let avatar;
 let moves = 0;
-
+let computerGame = true;
 //sets up board layout and gives each cell a class name to be used later
 function init() {
   const board = document.createElement('table');
@@ -55,6 +55,10 @@ function newGame() {
 
 }
 
+function gameTypeChange() {
+  computerGame = !computerGame;
+  newGame();
+}
 /*
 Check if a win or not
 Winning combos:
@@ -63,21 +67,43 @@ if row is all same value
 if diagonal all same value (diagonalA or diagonalB)
  */
 function win(clicked) {
-  var cellTypes = clicked.className.split(/\s+/);
-  for (var i = 0; i < cellTypes.length; i++) {
-    var testClass = '.' + cellTypes[i];
-    if(victory("" + testClass, player)){
-      return true
+  let cellTypes = clicked.className.split(/\s+/);
+  for (let i = 0; i < cellTypes.length; i++) {
+    let testClass = '.' + cellTypes[i];
+    if(victory("" + testClass, player)==="victory"){
+      return true;
     };
+  }
+}
+
+
+
+function willWin(clicked) {
+  let cellTypes = clicked.className.split(/\s+/);
+  for (let i = 0; i < cellTypes.length; i++) {
+    let testClass = '.' + cellTypes[i];
+    if(victory("" + testClass, player)==="almostVictorious"){
+      return true;
+    }
   }
 }
 
 //finds all winning combos depending on which cell is clicked, checks if those other cells have the same inner text (player)
 function victory(selector, text) {
-  var winningCombos = Array.from(document.querySelectorAll(selector));
-  var victorious = winningCombos.every((elem) => {return elem.id===text})
-  return victorious;
+  let winningCombos = Array.from(document.querySelectorAll(selector));
+  let playerMarkedCount = 0;
+  for (let i=0; i<winningCombos.length; i++) {
+    if (winningCombos[i].id===text){
+      playerMarkedCount++;
+    }
+  }
+  if (playerMarkedCount===3){
+    return "victory";
+  }else if (playerMarkedCount===2){
+    return "almostVictorious"
+  }
 };
+
 
 
 //Assigns user value to the clicked square and changes the current player to computer.
@@ -95,16 +121,24 @@ function set() {
     alert(`It's a tie!`);
     newGame();
   } else {
-    player = 'O';
-    document.getElementById('current-player').innerText = 'Player ' + player + ' thinking...';
-    setTimeout(computerSet,800);
+    if (player === 'X') {player = 'O'}
+    else if (player === 'O') {player = 'X'}
+    document.getElementById('current-player').innerText = 'Player ' + player + ' turn...';
+    if (computerGame){
+      setTimeout(computerSet,800);
+    }
   }
 }
 
 //Assigns computer value to a random square and then changes player back to user
 function computerSet() {
-  var availableCells = Array.from(document.querySelectorAll("td")).filter((elem) =>{return !elem.id});
-  var computerSelection = Math.floor(Math.random() * (availableCells.length));
+  let availableCells = Array.from(document.querySelectorAll("td")).filter((elem) =>{return !elem.id});
+  let computerSelection = Math.floor(Math.random() * (availableCells.length));
+  for (let i=0; i<availableCells.length; i++){
+    if (willWin(availableCells[i])){
+      computerSelection=i;
+    }
+  }
   availableCells[computerSelection].innerHTML=`<div style="background-image: url('https://lessonpix.com/drawings/96419/100x100/Robot.png')">${player}</div>`;
   availableCells[computerSelection].id=player;
   moves += 1; 
