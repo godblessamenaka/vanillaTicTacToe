@@ -9,11 +9,11 @@ function init() {
   document.getElementById('tictactoe').appendChild(board);
 
 
-  for (var i = 0; i < 3; i++) {
-    var row = document.createElement('tr');
+  for (let i = 0; i < 3; i++) {
+    let row = document.createElement('tr');
     board.appendChild(row);
-    for (var j = 0; j < 3; j++) {
-      var cell = document.createElement('td');
+    for (let j = 0; j < 3; j++) {
+      let cell = document.createElement('td');
       cell.classList.add('col' + j, 'row' + i);
       if (i == j) {
         cell.classList.add('diagonalA');
@@ -27,10 +27,17 @@ function init() {
 
     }
   }
+
+  let avatars = document.getElementsByClassName("avatar-option")
+  for (let i=0; i<avatars.length; i++) {
+    avatars[i].addEventListener('click', selectAvatar)
+  }
+  
+
   window.addEventListener('load', function() {
   document.querySelector('input[type="file"]').addEventListener('change', function() {
       if (this.files && this.files[0]) {
-          var img = document.querySelector('img'); 
+          let img = document.querySelector('img'); 
           img.src = URL.createObjectURL(this.files[0]); // set src to file url
           img.onload = imageIsLoaded; // optional onload event listener
           avatar = img.src;
@@ -41,6 +48,12 @@ function init() {
 function imageIsLoaded(e) { alert("Hey, good lookin'!"); }
   
   newGame();
+}
+
+function selectAvatar() {
+  console.log(this);
+  avatar = this.src;
+  alert('Hey, good lookin!');
 }
 
 // starts new game, initializing score and moves to zero and cells to empty:
@@ -76,7 +89,16 @@ function win(clicked) {
   }
 }
 
-
+function xCanWin(clicked) {
+  let cellTypes = clicked.className.split(/\s+/);
+  for (let i = 0; i < cellTypes.length; i++) {
+    let testClass = '.' + cellTypes[i];
+    if(victory("" + testClass, 'X')==="almostVictorious"){
+      return true;
+    }
+  }
+}
+// end function XcanWin(clicked)
 
 function willWin(clicked) {
   let cellTypes = clicked.className.split(/\s+/);
@@ -111,7 +133,7 @@ function set() {
   if (this.innerHTML !== '') {
     return; //can't click an occupied cell
   }
-  this.innerHTML = `<div style="background-image: url(${avatar})">${player}</div>`;
+  this.innerHTML = `<div style="background-image: url(${avatar}); background-repeat: no-repeat; background-position: center">${player}</div>`;
   this.id = player;
   moves += 1;
   if (win(this)) {
@@ -130,12 +152,15 @@ function set() {
   }
 }
 
-//Assigns computer value to a random square and then changes player back to user
+//Assigns computer value and then changes player back to user
 function computerSet() {
   let availableCells = Array.from(document.querySelectorAll("td")).filter((elem) =>{return !elem.id});
   let computerSelection = Math.floor(Math.random() * (availableCells.length));
-  for (let i=0; i<availableCells.length; i++){
-    if (willWin(availableCells[i])){
+  for (let i=0; i<availableCells.length; i++){ // Prevent X from winning
+   if (xCanWin(availableCells[i])){
+      computerSelection=i;
+    }
+    if (willWin(availableCells[i])){ //but more important, win immediately if you can 
       computerSelection=i;
     }
   }
@@ -145,8 +170,8 @@ function computerSet() {
   if (win(availableCells[computerSelection])) {
     alert('Player ' + player + ' wins!!!');
     newGame();
-  } else if (moves === 9) {
-    alert(`It's a tie!`);
+  } else if (moves === 9) {    
+   alert(`It's a tie!`);
     newGame();
   } else {
     player = "X";
