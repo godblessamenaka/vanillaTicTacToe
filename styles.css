@@ -1,10 +1,9 @@
 body {
-
+background-color: rgba(0,0,0,0.8);
+color: inherit;
 }
 
-.header {
-  text-align: center;
-}
+
 
 
 #tictactoe * {
@@ -22,12 +21,15 @@ body {
 
 .menu, .header {
   margin: 0 auto 0 auto;
+  text-align: center;
   padding: 20px 0 20px 0;
   float: none;
   background-color: rgba(0,0,0,0.4);
   border: 1px solid;
-  border-image-source: linear-gradient(green, darkgreen);
+  border-image-source: linear-gradient(to right, black, white);
   border-image-slice: 1;
+  color: #fff;
+
 }
 
 .menu * {
@@ -52,24 +54,38 @@ body {
   display: inline;
   border-radius: 100%;
   height: 100px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#avatar-menu img {
+ box-shadow: 10px 10px 8px rgba(0,0,0,0.5);
+ margin: 5px;
 }
 
 td {
   font-size:80px;
-/*  color:#111;
-*/  height: 128px;
+  color: inherit;
+  height: 128px;
   width: 128px;
   text-align: center;
   background-size: cover;
 }
+
 .col0,.col1 {
+  color: rgba(100,100,100,0.4);
   border-right: 2px solid;
+  border-image-source: linear-gradient(to right, black, white);
+  border-image-slice: 2;
 }
 
 
 .row0,.row1 {
+  color: rgba(100,100,100,0.4);
   border-bottom: 2px solid;
+  border-image-source: linear-gradient(to right, black, white);
+  border-image-slice: 2;
+
 
 
 }

@@ -15,7 +15,6 @@ function init() {
     for (let j = 0; j < 3; j++) {
       let cell = document.createElement('td');
       cell.classList.add('col' + j, 'row' + i);
-      cell.style.cssText = "border: 2px solid rgba(0,0,0,0.3); border-image-slice: 2px; border-image: linear-gradient(to bottom, yellow, rgba(0, 0, 0, 0)) 1 100%;";
       if (i == j) {
         cell.classList.add('diagonalA');
       }
