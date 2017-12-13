@@ -15,6 +15,7 @@ function init() {
     for (let j = 0; j < 3; j++) {
       let cell = document.createElement('td');
       cell.classList.add('col' + j, 'row' + i);
+      cell.style.cssText = "border: 2px solid rgba(0,0,0,0.3); border-image-slice: 2px; border-image: linear-gradient(to bottom, yellow, rgba(0, 0, 0, 0)) 1 100%;";
       if (i == j) {
         cell.classList.add('diagonalA');
       }
@@ -133,7 +134,7 @@ function set() {
   if (this.innerHTML !== '') {
     return; //can't click an occupied cell
   }
-  this.innerHTML = `<div style="background-image: url(${avatar}); background-repeat: no-repeat; background-position: center">${player}</div>`;
+  this.innerHTML = `<div style="background-image: url(${avatar}); background-repeat: no-repeat; background-position: center"><p>${player}</p></div>`;
   this.id = player;
   moves += 1;
   if (win(this)) {
@@ -164,7 +165,7 @@ function computerSet() {
       computerSelection=i;
     }
   }
-  availableCells[computerSelection].innerHTML=`<div style="background-image: url('https://lessonpix.com/drawings/96419/100x100/Robot.png')">${player}</div>`;
+  availableCells[computerSelection].innerHTML=`<div style="background-image: url('https://lessonpix.com/drawings/96419/100x100/Robot.png')"><p>${player}</p></div>`;
   availableCells[computerSelection].id=player;
   moves += 1; 
   if (win(availableCells[computerSelection])) {
